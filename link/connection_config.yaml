@@ -1,0 +1,14 @@
+sequential_topology:
+  left_right_neighbors:
+    left: 54.164.143.59
+    right: 3.86.218.66
+  
+  global_routing_table:
+    "01": left
+    "02": left
+    "03": self
+    "04": right
+    "05": right
+    "06": right
+    "07": right
+    "08": right
