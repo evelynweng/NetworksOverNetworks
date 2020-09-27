@@ -37,9 +37,11 @@ B,11.11.11.11
 1. upload the cmpe206 with different .txt file into each VM
 2. run mainCMPE206.py
 3. Enter your server name(Label)
-4. Enter to which server(Label)
-5. Enter your message
-6. press Enter.
+4. Do step 3. for each VM
+5. Choose one VM to do the following step.
+6. Enter to which server(Label)
+7. Enter your message
+8. press Enter.
 
 you should be able to see the result from the VM console.
 
