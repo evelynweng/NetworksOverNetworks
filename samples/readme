@@ -1,5 +1,0 @@
-This file contains a sample packet generator and reader in Python. 
-packet_generator generates a message file. packet_reader extracts the text message in the file.
-packet_generator encodes one user-entered text message at a time and writes it into message.txt
-packet_reader reads the message.txt file and creates the text message.
-The file "message.txt" contains the following string in hexadecimal form: "This is a test message." (period included).
