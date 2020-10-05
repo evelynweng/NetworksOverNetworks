@@ -8,7 +8,7 @@ class Tcp_server():
         self.BUFFER_SIZE = 1024  # Normally 1024
 
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        #self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.s.bind((self.TCP_IP, self.TCP_PORT))
         self.s.listen(1)
         print ("start listen")

@@ -1,12 +1,12 @@
 import yaml
-​
+
 TOPOLOGY = 'sequential_topology'
-​
+
 class Find_to_mac():
     def __init__(self):
         with open("link/connection_config.yaml") as fl:
             self.config = yaml.load(fl)[TOPOLOGY]
-​
+
     def find_mac(self, to_label):
       
         # import connection
@@ -17,5 +17,5 @@ class Find_to_mac():
         direction = self.config['global_routing_table'][to_label]
         if direction not in self.config['left_right_neighbors']:
             return None
-​
+        
         return self.config['left_right_neighbors'][direction]
