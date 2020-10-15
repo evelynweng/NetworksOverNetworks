@@ -7,9 +7,6 @@ from application import client_main
 mylabel = input("my label name:")
 ackflag = 0
 
-
-
-
 # call subprocess
 t_one = threading.Thread(target = server_main.service, args = (mylabel,))
 t_two = threading.Thread(target = client_main.service, args = (mylabel,))

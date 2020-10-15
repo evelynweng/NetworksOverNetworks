@@ -29,12 +29,7 @@ class Network():
         return to_label == mylabel
     
     def get_from_label(self, to_network_layer):
-        to_label_end = to_network_layer.find(",")
-        from_label_message = to_network_layer[to_label_end+1:]
-        from_label_end = from_label_message.find(",")
-        from_label = from_label_message[:from_label_end]
-
-        return from_label
+        return to_network_layer.split(',')[1]
         
     def get_payload(self, to_network_layer):
         to_label_end = to_network_layer.find(",")
@@ -44,4 +39,3 @@ class Network():
         message = from_label_message[from_label_end+1:]
 
         return message
-
