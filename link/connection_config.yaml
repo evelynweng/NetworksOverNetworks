@@ -1,0 +1,14 @@
+sequential_topology:
+  left_right_neighbors:
+    left: 
+    right: 
+  
+  global_routing_table:
+    "001": left
+    "002": left
+    "003": left
+    "004": self
+    "005": right
+    "006": right
+    "007": right
+    "008": right

@@ -1,16 +1,21 @@
+import yaml
+
+TOPOLOGY = 'sequential_topology'
+
 class Find_to_mac():
+    def __init__(self):
+        with open("link/connection_config.yaml") as fl:
+            self.config = yaml.load(fl)[TOPOLOGY]
+
     def find_mac(self, to_label):
       
         # import connection
         # only connection now eve<->evelyn<->kitty
-        link_config = {}
+        to_label = to_label.lower()
+        if to_label not in self.config['global_routing_table']:
+            return None
+        direction = self.config['global_routing_table'][to_label]
+        if direction not in self.config['left_right_neighbors']:
+            return None
         
-        with open("link/configure_of_connection.txt") as configure_of_conneciton:
-            for line in configure_of_conneciton:
-                s = line.split(",")
-                link_config[s[0]] = s[1][:-1]
-        
-        
-        to_mac = link_config[to_label]
-        
-        return to_mac
+        return self.config['left_right_neighbors'][direction]
