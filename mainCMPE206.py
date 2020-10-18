@@ -4,13 +4,7 @@ from application import server_main
 from application import client_main
 
 parser = argparse.ArgumentParser(description='CMPE206 Application')
-parser.add_argument("--traceroute", nargs='?', const=True, default=False)
-parser.add_argument("--ping", nargs='?', const=True, default=False)
 parser.add_argument('--command', nargs='?', choices=['traceroute', 'ping', 'message'], default='message')
-
-args = parser.parse_args()
-print(args)
-
 
 # main process
 mylabel = input("my label name:")
