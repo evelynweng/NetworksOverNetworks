@@ -56,3 +56,6 @@ Code base for SJSU CMPE 206 for Fall 2020
 curl -O https://bootstrap.pypa.io/get-pip.py  <br />
 python3 get-pip.py  <br />
 pip3 install pyyaml  <br />
+
+## using the command line interface
+To send messages type "send message" <br/>

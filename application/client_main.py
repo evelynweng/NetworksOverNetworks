@@ -7,9 +7,27 @@ from timeit import default_timer as timer
 def service(mylabel):
 	#application layer
 	while 1:
-		service_send_message = Service_send_message()
-		to_network_layer = service_send_message.message_service(mylabel)
 		
+		
+		print("You can currently send messages, ping and traceroute on this virtual network\n")
+		user_input = input('CMPE206>')
+		#print(user_input)
+
+
+		command = user_input.split(' ')
+	
+		if user_input == 'send message':
+			service_send_message = Service_send_message()
+			to_network_layer = service_send_message.message_service(mylabel)
+
+		elif command[0] == 'ping':
+			print('ping')
+			# service_ping = Service_ping()
+			# to_network_layer = service_ping.ping_service(mylabel,command[1])
+		elif command[0] == 'traceroute':
+			print(command[1])
+		else:
+			continue
 		#transport layer
 			# do nothing
 
@@ -30,7 +48,7 @@ def service(mylabel):
 		client = Tcp_client(to_mac, to_message)
 		client.start_client()
 
-		break
+		continue
 
 
 def system_forward_message(mylabel, to_link_layer):
