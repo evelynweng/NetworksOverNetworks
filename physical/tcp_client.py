@@ -16,10 +16,14 @@ class Tcp_client():
         #print(MESSAGE)
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #print("socket")
-        s.connect((TCP_IP, TCP_PORT))
-        #print("connected")
-        #print(__name__, "Sending")
+        s.settimeout(5)   # set time  out to 5 sececod
+
+        try:
+            s.connect((TCP_IP, TCP_PORT))
+        except socket.error as exc:
+            print ("Caught exception socket.error : %s" % exc)
+            s.close()
+            return 0
 
         s.send(MESSAGE)
 
