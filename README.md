@@ -1,6 +1,9 @@
 
 # Setup
 
+under dir of the program root
+pip install -r requirement.txt
+
 Need to configure the network topology first.
 - Start the VMs and get the ip addresses.
 - Edit the /link/configure_of_connections.txt
