@@ -2,6 +2,7 @@ from link.find_to_mac import Find_to_mac
 class Link():
     def __init__(self):
         self.temp_mac = "0.0.0.0"
+    
 
     def find_next_mac(self, to_link_layer):
         # find to_label

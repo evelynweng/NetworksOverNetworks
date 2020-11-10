@@ -4,10 +4,9 @@ from link.link import Link
 from physical.tcp_client import Tcp_client
 from timeit import default_timer as timer
 
-def service(mylabel):
+def service(mylabel,shared_keys):
 	#application layer
 	while 1:
-		
 		
 		print("You can currently send messages, ping and traceroute on this virtual network\n")
 		user_input = input('CMPE206>')
@@ -33,8 +32,8 @@ def service(mylabel):
 
 		#network layer
 			# 9/15 do nothing just forward message 
-		network=Network()
-		to_link_layer = network.network(to_network_layer)
+		network=Network(to_network_layer,shared_keys)
+		to_link_layer = network.network(to_network_layer,shared_keys)
 
 		# link layer
 		# find to_IP foward to client

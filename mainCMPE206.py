@@ -8,11 +8,11 @@ parser.add_argument('--command', nargs='?', choices=['traceroute', 'ping', 'mess
 
 # main process
 mylabel = input("my label name:")
-ackflag = 0
+shared_keys = dict()
 
 # call subprocess
-t_one = threading.Thread(target=server_main.service, args=(mylabel,))
-t_two = threading.Thread(target=client_main.service, args=(mylabel,))
+t_one = threading.Thread(target=server_main.service, args=(mylabel, shared_keys))
+t_two = threading.Thread(target=client_main.service, args=(mylabel, shared_keys))
 # exec subprocess
 t_one.start()
 t_two.start()

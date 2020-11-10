@@ -4,7 +4,7 @@ from physical.tcp_client import Tcp_client
 from physical.tcp_server import Tcp_server
 from application import client_main 
 
-def service(mylabel):
+def service(mylabel,shared_keys):
 	#physical layer
 	print("thread server")
 	tcp_server = Tcp_server()
@@ -23,8 +23,8 @@ def service(mylabel):
 		print(__name__, to_network_layer)
 		
 		# network layer
-		network = Network()
-		to_link_layer = network.forward_message(mylabel, to_network_layer)
+		network = Network(to_network_layer,shared_keys)
+		to_link_layer = network.forward_message(mylabel, to_network_layer,shared_keys)
 		
 		
 		if to_link_layer == None:
