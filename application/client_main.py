@@ -9,7 +9,7 @@ def service(mylabel,shared_keys):
 	#application layer
 	while 1:
 		
-		print("You can currently send messages, ping and traceroute on this virtual network\n")
+		print("You can currently send messages, ping and traceroute on this virtual network")
 		print("please select service: 0 = message, 1 = ping, 2 = tranceroute")
 		user_input = input('CMPE206>')
 		command = user_input.split(' ')
@@ -53,10 +53,10 @@ def service(mylabel,shared_keys):
 def system_forward_message(to_link_layer):
 	# link layer
 	# find to_IP foward to client
-	# get encrypt message to client
+
 	link = Link(to_link_layer)
 	to_mac, to_physical_layer = link.link()
-
+	
 	# physical: client
 	client = Tcp_client(to_mac, to_physical_layer)
 	client.start_client()

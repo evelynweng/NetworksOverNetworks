@@ -49,7 +49,7 @@ class Transport():
 
     def key_exchange_send(self, key_exchange_payload):
         print("key exchange send")
-        
+        # generate network layer format to link layer
         to_link_layer = (self.to_label+","+self.from_label
             +","+"key_request"+","+self.seqnum+","+key_exchange_payload.hex())
        
