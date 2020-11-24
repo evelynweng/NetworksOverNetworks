@@ -1,8 +1,3 @@
-
-from link.link import Link
-from physical.tcp_client import Tcp_client
-
-
 from security_evelyn.key_exchange import DiffieHellman, KeyExchange
 from security_evelyn.symmetric_encryption import SymmetricEncryption
 
@@ -17,51 +12,9 @@ class Network():
         self.seqnum   = network_data[3]
         self.payload  = ','.join(network_data[4 : ])
 
-    def network(self, to_network_layer,shared_keys):
-        to_link_layer = self.secure_messaging(shared_keys)
+    def network(self, to_network_layer):
+        to_link_layer = to_network_layer
         return to_link_layer
-    
-    def secure_messaging(self,shared_keys):
-        print("secure messaging handshake")
-        ke1 = KeyExchange()
-        key_exchange_payload = ke1.key_exchange_payload(self.to_label,shared_keys,True)
-        self.key_exchange_send(key_exchange_payload)
-        print("start to wait for return public_key")
-        while not (shared_keys[str(self.to_label)]): # busy wait for key to come in
-            continue
-        print("get the pubkey from target")
-        public_key_from_target = shared_keys[str(self.to_label)]
-        temp=ke1.ack_key_exchange_payload(self.to_label,shared_keys, public_key_from_target)
-        shared_key = shared_keys[self.to_label] 
-        cipher = SymmetricEncryption(shared_key)
-        print("secure_messaging shared_key:", shared_key)
-        print("self.payload.encode():", self.payload.encode())
-        ciphertext = cipher.encrypt(self.payload.encode())
-        print("encrypt message:", ciphertext)
-        shared_keys.pop(self.to_label) #delete key
-        print("delete used key:",self.to_label)
-        return self.to_label+","+self.from_label+","+"message"+","+self.seqnum+","+ciphertext.hex()
-
-    def key_exchange_send(self, key_exchange_payload):
-        print("key exchange send")
-        to_link_layer = self.to_label+","+self.from_label+","+"key_request"+","+self.seqnum+","+key_exchange_payload.hex()
-        link = Link()
-        to_mac = link.find_next_mac(to_link_layer)
-        to_message = link.add_header_to_message(to_link_layer)
-        
-        # to_message = to_mac,to_label,str(mylabel),to_message
-        # physical: client
-        client = Tcp_client(to_mac, to_message)
-        client.start_client()
-
-
-    def get_pubic_key(self,shared_keys):
-        print("get public key for source")
-        ke2 = KeyExchange()
-        ke2_public = ke2.ack_key_exchange_payload(self.from_label, shared_keys, bytes.fromhex(self.payload))
-        print("shared key create:", shared_keys[self.from_label])
-        print("return public key:", ke2_public)
-        return ke2_public
     
     def forward_message (self, mylabel, to_network_layer,shared_keys):
         print(__name__, mylabel, to_network_layer)
@@ -98,6 +51,13 @@ class Network():
             return to_network_layer
     
     # support functions (method that can be change): 
+    def get_pubic_key(self,shared_keys):
+        print("get public key for source")
+        ke2 = KeyExchange()
+        ke2_public = ke2.ack_key_exchange_payload(self.from_label, shared_keys, bytes.fromhex(self.payload))
+        print("shared key create:", shared_keys[self.from_label])
+        print("return public key:", ke2_public)
+        return ke2_public
 
     def message_decrypt(self,message,shared_keys):
         print("message decrypt")

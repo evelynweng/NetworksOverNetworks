@@ -1,5 +1,6 @@
 from application.service_send_message import Service_send_message
 from network.network import Network 
+from transport.transport import Transport
 from link.link import Link
 from physical.tcp_client import Tcp_client
 from timeit import default_timer as timer
@@ -17,7 +18,8 @@ def service(mylabel,shared_keys):
 	
 		if user_input == 'send message':
 			service_send_message = Service_send_message()
-			to_network_layer = service_send_message.message_service(mylabel)
+			to_transport_layer = service_send_message.message_service(mylabel)
+
 
 		elif command[0] == 'ping':
 			print('ping')
@@ -28,12 +30,14 @@ def service(mylabel,shared_keys):
 		else:
 			continue
 		#transport layer
-			# do nothing
+		print("clientmain shard_keys type:",type(shared_keys))
+		transport = Transport(to_transport_layer, shared_keys)
+		to_network_layer = transport.transport(shared_keys) ####transport.transport()
 
 		#network layer
 			# 9/15 do nothing just forward message 
-		network=Network(to_network_layer,shared_keys)
-		to_link_layer = network.network(to_network_layer,shared_keys)
+		network=Network(to_network_layer, shared_keys)
+		to_link_layer = network.network(to_network_layer)
 
 		# link layer
 		# find to_IP foward to client

@@ -47,8 +47,12 @@ class KeyExchange:
     def key_exchange_payload (self,target,shared_keys,init=True):
         # target should support __str__() and send()
         payload = self.dh.get_public()
+        print("shared_keys type:",type(shared_keys))
+        print("target type(str):",type(target))
         
         if init:
+            print("shared_keys type:",type(shared_keys))
+            print("target type(str):",type(target))
             shared_keys[str(target)] = None
         
         return payload
