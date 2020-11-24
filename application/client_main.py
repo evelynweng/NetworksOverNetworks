@@ -66,6 +66,8 @@ def service(mylabel,shared_keys):
 				# physical: client
 				client = Tcp_client(to_mac, to_physical_layer)
 				client.start_client()
+		else:
+			print("to_network_layer format invalid")
 
 		continue
 
