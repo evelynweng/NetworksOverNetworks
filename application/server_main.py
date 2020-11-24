@@ -18,13 +18,15 @@ def service(mylabel,shared_keys):
 		# link layer
 		# take off to_mac
 		link = Link()
-		to_network_layer = link.de_header_receive_message(receive_message)
+		to_network_layer = link.recv_message(receive_message)
 		
-		print(__name__, to_network_layer)
+		#not valid input or empty input
+		if not to_network_layer:
+			continue
 		
 		# network layer
 		network = Network(to_network_layer,shared_keys)
-		to_link_layer = network.forward_message(mylabel, to_network_layer,shared_keys)
+		to_link_layer = network.recv_packet(mylabel,shared_keys)
 		
 		
 		if to_link_layer == None:
@@ -35,7 +37,7 @@ def service(mylabel,shared_keys):
 		else:
 			# __init client service to forward or sent ack message
 			# cannot test on self->self message, will error.
-			client_main.system_forward_message(mylabel, to_link_layer)
+			client_main.system_forward_message(to_link_layer)
 	
 
 	

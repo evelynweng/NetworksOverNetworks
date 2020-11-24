@@ -6,9 +6,11 @@ class Find_to_mac():
     def __init__(self):
         with open("link/connection_config.yaml") as fl:
             self.config = yaml.load(fl)[TOPOLOGY]
+    
+    def get_my_mac(self):
+        return "0.0.0.0"
 
     def find_mac(self, to_label):
-      
         # import connection
         # only connection now eve<->evelyn<->kitty
         to_label = to_label.lower()
