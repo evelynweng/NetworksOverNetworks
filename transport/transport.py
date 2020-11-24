@@ -2,8 +2,8 @@ from network.network import Network
 from link.link import Link
 from physical.tcp_client import Tcp_client
 
-from security_evelyn.key_exchange import DiffieHellman, KeyExchange
-from security_evelyn.symmetric_encryption import SymmetricEncryption
+from security.key_exchange import DiffieHellman, KeyExchange
+from security.symmetric_encryption import SymmetricEncryption
 
 
 class Transport():

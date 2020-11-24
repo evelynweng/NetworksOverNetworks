@@ -1,6 +1,5 @@
 from network.network import Network
 from link.link import Link
-from physical.tcp_client import Tcp_client
 from physical.tcp_server import Tcp_server
 from application import client_main 
 
