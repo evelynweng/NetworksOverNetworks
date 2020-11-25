@@ -12,11 +12,11 @@ def service(mylabel,shared_keys):
 	while 1:
 		
 		print("You can currently send messages, ping and traceroute on this virtual network")
-		print("please select service: 0 = message, ping: ping .destination, tranceroute: traceroute .destination")
+		print("please select service: message, ping: ping .destination, tranceroute: traceroute .destination")
 		user_input = input('CMPE206>')
 		command = user_input.split(' ')
 	
-		if user_input == '0':
+		if user_input == 'message':
 			service_send_message = Service_send_message()
 			to_transport_layer = service_send_message.message_service(mylabel)
 			transport = Transport(to_transport_layer, shared_keys)

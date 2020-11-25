@@ -24,6 +24,7 @@ def service(mylabel,shared_keys):
 			continue
 		
 		# network layer
+		
 		network = Network(to_network_layer,shared_keys)
 		to_link_layer = network.recv_packet(mylabel,shared_keys)
 		

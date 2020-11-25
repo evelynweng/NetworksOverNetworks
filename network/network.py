@@ -2,8 +2,10 @@ from security.key_exchange import DiffieHellman, KeyExchange
 from security.symmetric_encryption import SymmetricEncryption
 
 import datetime
-#from dateutil.parser import parse
+from dateutil.parser import parse
 from data_parse.network_message import NetworkMessage
+
+rtt_arr = []
 
 class Network():
     def __init__(self, to_network_layer,shared_keys):
@@ -22,11 +24,9 @@ class Network():
         return to_link_layer
     
     def recv_packet (self, mylabel,shared_keys):
-       
-        if self.match_label(mylabel):
 
+        if self.match_label(mylabel):
             # print ("this server received:" + message +" from: "+ new_to_label)
-            
             if self.get_identifier()=="key_request" :
                 to_link_layer =self.function_key_request(mylabel,shared_keys)
                 return to_link_layer
@@ -40,21 +40,22 @@ class Network():
                 return to_link_layer
 
             elif self.get_identifier() == "ACK" :
+                print("recv, ACK from:", self.get_from_label())
                 return None
             
-            elif self.get_identifier == "ping":
-                to_link_layer = self.function_ping(self.unchange_message)
+            elif self.get_identifier() == "ping":
+                to_link_layer = self.function_ping(self.unchange_message,mylabel)
                 return to_link_layer
             
-            elif self.get_identifier == "traceroute":
-                to_link_layer = self.function_traceroute(self.unchange_message)
+            elif self.get_identifier() == "traceroute":
+                to_link_layer = self.function_traceroute(self.unchange_message,mylabel)
                 return to_link_layer
                 
             else:
                 return None # default action
 
         elif self.get_identifier() == 'traceroute':
-            to_link_layer = self.function_traceroute_mid(self.unchange_message)
+            to_link_layer = self.function_traceroute_mid(self.unchange_message,mylabel)
             return to_link_layer
 
         else: #not match keep sending message
@@ -62,8 +63,8 @@ class Network():
 
 
     # support functions (method that can be change): 
-    def function_traceroute_mid(self,to_network_layer):
-        network_message = NetworkMessage().from_array(to_network_layer)
+    def function_traceroute_mid(self,to_network_layer,mylabel):
+        network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
         identifier = network_message.get_identifier()
         response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
@@ -76,8 +77,8 @@ class Network():
         else:
             return response_network_message.set_ttl(64).get_data()
 
-    def function_traceroute(self, to_network_layer):
-        network_message = NetworkMessage().from_array(to_network_layer)
+    def function_traceroute(self, to_network_layer,mylabel):
+        network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
         identifier = network_message.get_identifier()
         response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
@@ -89,8 +90,8 @@ class Network():
         else:
             return response_network_message.set_ttl(64).get_data()
         
-    def function_ping(self, to_network_layer):
-        network_message = NetworkMessage().from_array(to_network_layer)
+    def function_ping(self,to_network_layer,mylabel):
+        network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
         identifier = network_message.get_identifier()
         response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
@@ -182,7 +183,7 @@ class Network():
 
     def match_label(self, mylabel):
         
-        return self.to_label == mylabel
+        return (self.to_label) == mylabel
     
     def get_from_label(self):
         return self.from_label

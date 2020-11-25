@@ -4,7 +4,7 @@ class NetworkMessage:
 
     def __init__(self, to=''):
         if bool(to):
-            self.to_network_layer = self.from_string(to)
+            self.from_string(to)
 
     def set_to_label(self, val):
         self.to_network_layer[0] = str(val)

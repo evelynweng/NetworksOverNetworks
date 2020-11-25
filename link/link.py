@@ -39,10 +39,11 @@ class Link():
         return to_physical_layer
     
     def recv_message (self, receive_message): #de header
-
         if receive_message:
             message_data = receive_message.split(",")
+            
             link_identifier = message_data[0]
+
             if link_identifier == "CMPE206":  #valid identifier->proceed
                 to_network_layer = ','.join(message_data[3 : ])
                 return to_network_layer

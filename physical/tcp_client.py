@@ -35,4 +35,4 @@ class Tcp_client():
 
         s.close()
 
-        print ("received data:", data.decode())
+        print ("client socket close")

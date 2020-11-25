@@ -3,7 +3,11 @@
 
 ## install requirement.txt under dir of the program root
 ```shell
+curl -O https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py
 pip install -r requirement.txt
+pip3 install pyyaml
+pip3 install python-dateutil
 ```
 
 Need to configure the network topology first.
