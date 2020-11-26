@@ -7,7 +7,7 @@ from application.service_send_message import Service_send_message
 from application.ping_service import Ping_service
 from application.traceroute_service import Traceroute_service
 
-def service(mylabel,shared_keys):
+def service(mylabel,shared_keys,Tx_queue):
 	#application layer
 	while 1:
 		
@@ -19,8 +19,8 @@ def service(mylabel,shared_keys):
 		if user_input == 'message':
 			service_send_message = Service_send_message()
 			to_transport_layer = service_send_message.message_service(mylabel)
-			transport = Transport(to_transport_layer, shared_keys)
-			to_network_layer = transport.transport(shared_keys) 
+			transport = Transport(to_transport_layer)
+			to_network_layer = transport.transport(shared_keys,Tx_queue) 
 
 		elif command[0] == 'ping':
 			ping_send_service = Ping_service()
@@ -33,54 +33,24 @@ def service(mylabel,shared_keys):
 		#transport layer
 
 		if isinstance(to_network_layer,str):
-			#network layer
-			network=Network(to_network_layer, shared_keys)
+			# network layer
+			network = Network(to_network_layer, shared_keys)
 			to_link_layer = network.network(to_network_layer)
-
-			# link layer
-			# find to_IP foward to client
-
-			link = Link(to_link_layer)
-			to_mac, to_physical_layer = link.link()
-			
-
-			# to_message = to_mac,to_label,str(mylabel),to_message
-			# physical: client
-			client = Tcp_client(to_mac, to_physical_layer)
-			client.start_client()
+			Tx_queue.put(to_link_layer)
 			
 		elif isinstance(to_network_layer,list):
 			for packet in to_network_layer:
-				# transport layer
-					# do nothing
-				# network layer
-				# 9/15 do nothing just forward message
 				network = Network(packet, shared_keys)
 				to_link_layer = network.network(packet)
-				# link layer
-				# find to_IP foward to client
-				# get encrypt message to client
-				link = Link(to_link_layer)
-				to_mac, to_physical_layer = link.link()
-				# to_message = to_mac,to_label,str(mylabel),to_message
-				# physical: client
-				client = Tcp_client(to_mac, to_physical_layer)
-				client.start_client()
+				Tx_queue.put(to_link_layer)
+
 		else:
 			print("to_network_layer format invalid")
 
 		continue
 
-def system_forward_message(to_link_layer):
-	# link layer
-	# find to_IP foward to client
-
-	link = Link(to_link_layer)
-	to_mac, to_physical_layer = link.link()
-	
-	# physical: client
-	client = Tcp_client(to_mac, to_physical_layer)
-	client.start_client()
+def system_forward_message(to_link_layer,Tx_queue):
+	Tx_queue.put(to_link_layer)
 	
 if __name__ == "__main__":
 	service(123)

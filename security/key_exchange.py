@@ -47,12 +47,12 @@ class KeyExchange:
     def key_exchange_payload (self,target,shared_keys,init=True):
         # target should support __str__() and send()
         payload = self.dh.get_public()
-        print("shared_keys type:",type(shared_keys))
-        print("target type(str):",type(target))
+        #print("shared_keys type:",type(shared_keys))
+        #print("target type(str):",type(target))
         
         if init:
-            print("shared_keys type:",type(shared_keys))
-            print("target type(str):",type(target))
+            #print("shared_keys type:",type(shared_keys))
+            #print("target type(str):",type(target))
             shared_keys[str(target)] = None
         
         return payload
@@ -68,7 +68,7 @@ class KeyExchange:
         derived_key = HKDF(
             algorithm=hashes.SHA256(), length=(self.key_bits//8),
             salt=None, info=b'handshake data',).derive(share_secret)
-        print("save derived_key:",derived_key)
+        #print("save derived_key:",derived_key)
         shared_keys[str(source)] = derived_key
         
         return self.dh.get_public()

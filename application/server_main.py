@@ -3,7 +3,7 @@ from link.link import Link
 from physical.tcp_server import Tcp_server
 from application import client_main 
 
-def service(mylabel,shared_keys):
+def service(mylabel,shared_keys,Tx_queue):
 	#physical layer
 	print("thread server")
 	tcp_server = Tcp_server()
@@ -37,7 +37,7 @@ def service(mylabel,shared_keys):
 		else:
 			# __init client service to forward or sent ack message
 			# cannot test on self->self message, will error.
-			client_main.system_forward_message(to_link_layer)
+			client_main.system_forward_message(to_link_layer,Tx_queue)
 	
 
 	
