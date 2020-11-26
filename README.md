@@ -20,51 +20,24 @@ Need to configure the network topology first.
             - B's IP = 11.11.11.11
             - C's IP = 22.22.22.22
 
-
-For A: **!!!remember to add a newline at the end of the file!!!**
--  A only connects to B, so to reach B or C needs to go to B. The IP for B,C is B's IP. This is datagram model.
-```
-B,11.11.11.11
-C,11.11.11.11
-
-```
-For B: **!!!remember to add a newline at the end of the file!!!**
--  B connects to A and B, IP for A is A's IP. IP for C is C's IP.
-```
-A,00.00.00.00
-C,22.22.22.22
-
-```
-For C:**!!!remember to add a newline at the end of the file!!!**
--  same as A, C only connects to B. Need to go to B for A, B. Both IP will be B's IP.
-```
-A,11.11.11.11
-B,11.11.11.11
-
-```
-
 # Start the Program
-1. upload the cmpe206 with different .txt file into each VM
+1. upload the cmpe206 with different .routing file into each VM
 2. run mainCMPE206.py
 3. Enter your server name(Label)
 4. Do step 3. for each VM
 5. Choose one VM to do the following step.
-6. Enter to which server(Label)
-7. Enter your message
-8. press Enter.
+6. Enter one of the commend
+```shell
+message
+ping target(label)
+traceroute target(label)
+```
 
 you should be able to see the result from the VM console.
 
-![image name](pics/example.jpg)
+![image name](pics/Image_2.jpg)
 
 
 # sjsu_cmpe_F20_206
 Code base for SJSU CMPE 206 for Fall 2020
 
-## install yaml
-curl -O https://bootstrap.pypa.io/get-pip.py  <br />
-python3 get-pip.py  <br />
-pip3 install pyyaml  <br />
-
-## using the command line interface
-To send messages type "send message" <br/>
