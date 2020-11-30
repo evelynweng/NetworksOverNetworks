@@ -105,7 +105,7 @@ class Network():
             if is_equal(network_message.get_from_label(), network_message.get_to_label_original()):
                     print("End")
             else:
-                response_network_message.set_to_label(network_message.set_to_label_original()).set_acknowledgment_number('SYNC')\
+                response_network_message.set_to_label(network_message.get_to_label_original()).set_acknowledgment_number('SYNC')\
                     .set_sequence_number(network_message.get_sequence_number() + 1).set_start_time_now()\
                     .set_ttl(network_message.get_sequence_number() + 1)
                 print("Responding with: plus 1: " + response_network_message.get_data())
