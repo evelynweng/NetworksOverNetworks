@@ -79,12 +79,13 @@ class Network():
 
         ttl = network_message.get_ttl() - 1
         if ttl > 0:
-            print("handle_traceroute_mid" + network_message.get_data())
             network_message = network_message.set_ttl(ttl)
+            print("handle_traceroute_mid: " + network_message.get_data())
             return network_message.get_data()
         else:
-            print("handle_traceroute_mid: else:" + network_message.get_data())
-            return response_network_message.set_ttl(15).get_data()
+            response_network_message = response_network_message.set_ttl(15)
+            print("handle_traceroute_mid: else: " + response_network_message.get_data())
+            return response_network_message.get_data()
 
     def handle_traceroute(self, to_network_layer, mylabel):
         network_message = NetworkMessage().from_string(to_network_layer)
@@ -97,20 +98,17 @@ class Network():
             end_time = datetime.datetime.now()
             rtt_datetime = end_time - parse(start_time)
             hop = network_message.get_sequence_number()
-            hop_max = 15 - network_message.get_ttl() - hop
-            print(' '.join(['hop #', 'rtt', 'name']))
-            message = ' '.join([str(hop), str(rtt_datetime.total_seconds()), network_message.get_from_label(), str(hop_max)])
+            print(' '.join(['hop #      ', 'rtt       ', 'name    ']))
+            message = ' '.join([str(hop), str(rtt_datetime.total_seconds()), network_message.get_from_label()])
             print(message)
-
             if is_equal(network_message.get_from_label(), network_message.get_to_label_original()):
-                    print("End")
+                print("End")
             else:
                 response_network_message.set_to_label(network_message.get_to_label_original()).set_acknowledgment_number('SYNC')\
                     .set_sequence_number(network_message.get_sequence_number() + 1).set_start_time_now()\
                     .set_ttl(network_message.get_sequence_number() + 1)
                 print("Responding with: plus 1: " + response_network_message.get_data())
                 return response_network_message.get_data()
-
             return None
         else:
             print("Responding with: " + response_network_message.set_ttl(15).get_data())
