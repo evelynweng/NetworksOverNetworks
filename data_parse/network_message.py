@@ -94,3 +94,9 @@ class NetworkMessage:
         self.to_network_layer[6] = str(val)
         return self
 
+    def set_sequence_number(self, val):
+        self.to_network_layer[4] = str(val)
+        return self
+
+    def get_sequence_number(self):
+        return int(self.to_network_layer[4])

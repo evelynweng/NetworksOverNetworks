@@ -83,10 +83,19 @@ class Network():
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
 
         if network_message.get_acknowledgment_number() == "ACK":
-            print('route: ' + network_message.get_data())
+            start_time = network_message.get_start_time()
+            end_time = datetime.datetime.now()
+            rtt_datetime = end_time - parse(start_time)
+            hop = network_message.get_sequence_number()
+            hop_max = 15 - network_message.get_ttl() - hop
+            print(' '.join(['hop #', 'rtt', 'name']))
+            if hop_max >= 0:
+                message = ' '.join([hop, str(rtt_datetime.total_seconds()), network_message.get_from_label(), hop_max])
+                print(message)
             return None
         else:
             return response_network_message.set_ttl(15).get_data()
+
     def function_ping(self,to_network_layer,mylabel):
         network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
