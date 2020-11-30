@@ -12,7 +12,7 @@ class Tcp_client():
         BUFFER_SIZE = 1024
         MESSAGE = self.send_message.encode()
 
-        print(__name__, TCP_IP)
+        #print(__name__, TCP_IP)
         #print(MESSAGE)
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,7 +27,7 @@ class Tcp_client():
 
         s.send(MESSAGE)
 
-        print(__name__, "Sent, wait for recv")
+        #print(__name__, "Sent, wait for recv")
 
         data = s.recv(BUFFER_SIZE)
 
@@ -35,4 +35,4 @@ class Tcp_client():
 
         s.close()
 
-        print ("client socket close")
+        #print ("client socket close")

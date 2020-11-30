@@ -1,3 +1,5 @@
+import datetime
+
 # [to_label, from_label, identifier, get_acknowledgment_number,  ...]
 class NetworkMessage:
     to_network_layer = ['to_label', 'from_label', 'identifier', 'acknowledgment_number', '']
@@ -53,6 +55,8 @@ class NetworkMessage:
         data_length = 5
         if self.get_identifier() == 'ping':
             data_length = 6
+        elif self.get_identifier() == 'traceroute':
+            data_length = 8
         for x in range(data_length - len(self.to_network_layer)):
             self.to_network_layer.append('')
     # ----------------- end of common logic  ----------------------------
@@ -81,16 +85,34 @@ class NetworkMessage:
         self.to_network_layer[5] = str(val)
         return self
 
+    def set_start_time_now(self):
+        self.to_network_layer[5] = str(datetime.datetime.now())
+        return self
+
     def Average(self, lst):
         return sum(lst) / len(lst)
 
-    # traceroute [..., ttl]
+    # traceroute [..., sequence, start_time, ttl, original_to]
     def get_ttl(self):
-        return int(self.to_network_layer[4])
+        return int(self.to_network_layer[6])
 
     def set_ttl(self, val):
+        self.to_network_layer[6] = str(val)
+        return self
+
+    def set_sequence_number(self, val):
         self.to_network_layer[4] = str(val)
         return self
 
-    def is_traceroute_ACK(self):
-        return bool(self.to_network_layer[5])
+    def get_sequence_number(self):
+        return int(self.to_network_layer[4])
+
+    def get_start_time_value(self):
+        return self.to_network_layer[5]
+
+    def set_to_label_original(self, val):
+        self.to_network_layer[7] = str(val)
+        return self
+
+    def get_to_label_original(self):
+        return self.to_network_layer[7]

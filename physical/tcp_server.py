@@ -20,7 +20,7 @@ class Tcp_server():
         data = self.conn.recv(self.BUFFER_SIZE)
         if data:
             data = data.decode()
-            print ("received data:", data)
+            print ("received data",data)
             self.conn.send("router ack".encode())  # echo
         self.conn.close()
         return data

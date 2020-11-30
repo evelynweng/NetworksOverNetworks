@@ -7,6 +7,11 @@ from data_parse.network_message import NetworkMessage
 
 rtt_arr = []
 
+
+def is_equal(str1, str2):
+    return str1 == str2
+
+
 class Network():
     def __init__(self, to_network_layer,shared_keys):
         if to_network_layer :
@@ -20,6 +25,8 @@ class Network():
             self.unchange_message = to_network_layer #packet unchange
 
     def network(self, to_network_layer):
+        # format already as format
+        # do nothing
         to_link_layer = to_network_layer
         return to_link_layer
     
@@ -48,48 +55,65 @@ class Network():
                 return to_link_layer
             
             elif self.get_identifier() == "traceroute":
-                to_link_layer = self.function_traceroute(self.unchange_message,mylabel)
+                to_link_layer = self.handle_traceroute(self.unchange_message, mylabel)
                 return to_link_layer
-                
+
             else:
                 return None # default action
 
         elif self.get_identifier() == 'traceroute':
-            to_link_layer = self.function_traceroute_mid(self.unchange_message,mylabel)
+            to_link_layer = self.handle_traceroute_mid(self.unchange_message, mylabel)
             return to_link_layer
 
         else: #not match keep sending message
+            print("forward message")
             return self.get_forward_message()
 
 
-    # support functions (method that can be change): 
-    def function_traceroute_mid(self,to_network_layer,mylabel):
-        network_message = NetworkMessage(to_network_layer)
+    # support functions (method that can be change):
+    def handle_traceroute_mid(self, to_network_layer, mylabel):
+        network_message = NetworkMessage().from_string(to_network_layer)
         new_to_label = network_message.get_from_label()
-        identifier = network_message.get_identifier()
-        response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
+        response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-    
-        ttl = network_message.get_ttl()
+
+        ttl = network_message.get_ttl() - 1
         if ttl > 0:
-            network_message = network_message.set_ttl(ttl - 1)
+            network_message = network_message.set_ttl(ttl)
+            print("handle_traceroute_mid: " + network_message.get_data())
             return network_message.get_data()
         else:
-            return response_network_message.set_ttl(64).get_data()
+            response_network_message = response_network_message.set_ttl(15)
+            print("handle_traceroute_mid: else: " + response_network_message.get_data())
+            return response_network_message.get_data()
 
-    def function_traceroute(self, to_network_layer,mylabel):
-        network_message = NetworkMessage(to_network_layer)
+    def handle_traceroute(self, to_network_layer, mylabel):
+        network_message = NetworkMessage().from_string(to_network_layer)
         new_to_label = network_message.get_from_label()
-        identifier = network_message.get_identifier()
-        response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
+        response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-            
+        print("handle_traceroute: " + network_message.get_data())
         if network_message.get_acknowledgment_number() == "ACK":
-            print('route: ' + network_message.get_data())
+            start_time = network_message.get_start_time_value()
+            end_time = datetime.datetime.now()
+            rtt_datetime = end_time - parse(start_time)
+            hop = network_message.get_sequence_number()
+            print(' '.join(['hop #      ', 'rtt       ', 'name    ']))
+            message = '       '.join([str(hop), str(rtt_datetime.total_seconds()), network_message.get_from_label()])
+            print(message)
+            if is_equal(network_message.get_from_label(), network_message.get_to_label_original()):
+                print("End")
+            else:
+                response_network_message.set_to_label(network_message.get_to_label_original()).set_acknowledgment_number('SYNC')\
+                    .set_sequence_number(network_message.get_sequence_number() + 1).set_start_time_now()\
+                    .set_ttl(network_message.get_sequence_number() + 1)
+                print("Responding with: plus 1: " + response_network_message.get_data())
+                return response_network_message.get_data()
             return None
         else:
-            return response_network_message.set_ttl(64).get_data()
-        
+            print("Responding with: " + response_network_message.set_ttl(15).get_data())
+            return response_network_message.set_ttl(15).get_data()
+
     def function_ping(self,to_network_layer,mylabel):
         network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
@@ -123,7 +147,9 @@ class Network():
         new_to_label = self.get_from_label()
         message = self.get_payload()
         message = self.message_decrypt(message,shared_keys)
+        print("*****************************************************************")
         print ("decrypt message:" + message +" from: "+ new_to_label)
+        print("*****************************************************************")
 
         #set ACK message attribute
         self.to_label = new_to_label
