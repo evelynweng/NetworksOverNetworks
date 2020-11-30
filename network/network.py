@@ -109,7 +109,7 @@ class Network():
                     .set_sequence_number(network_message.get_sequence_number() + 1).set_start_time_now()\
                     .set_ttl(network_message.get_sequence_number() + 1)
                 print("Responding with: plus 1: " + response_network_message.get_data())
-                return response_network_message
+                return response_network_message.get_data()
 
             return None
         else:
