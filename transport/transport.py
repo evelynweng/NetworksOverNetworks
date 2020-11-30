@@ -7,7 +7,7 @@ from security.symmetric_encryption import SymmetricEncryption
 
 
 class Transport():
-    def __init__(self, to_transport_layer,shared_keys):
+    def __init__(self, to_transport_layer):
         network_data = to_transport_layer.split(",")
         # to_label,mylabel,idtfier,seqnum,payload
         self.to_label = network_data[0]
@@ -17,18 +17,18 @@ class Transport():
         self.payload  = ','.join(network_data[4 : ])
         self.forward_message = to_transport_layer
 
-    def transport(self, shared_keys):
+    def transport(self, shared_keys,Tx_queue):
         if (self.identifier == "message"):
-            to_network_layer = self.secure_messaging(shared_keys)
+            to_network_layer = self.secure_messaging(shared_keys,Tx_queue)
         else:
             to_network_layer = self.forward_message
         return to_network_layer
 
-    def secure_messaging(self,shared_keys):
+    def secure_messaging(self,shared_keys,Tx_queue):
         #print("secure messaging handshake")
         ke1 = KeyExchange()
         key_exchange_payload = ke1.key_exchange_payload(self.to_label,shared_keys,True)
-        self.key_exchange_send(key_exchange_payload)
+        self.key_exchange_send(key_exchange_payload,Tx_queue)
 
         while not (shared_keys[str(self.to_label)]): 
             continue
@@ -47,15 +47,9 @@ class Transport():
         return (self.to_label+","+self.from_label+","
         +"message"+","+self.seqnum+","+ciphertext.hex())
 
-    def key_exchange_send(self, key_exchange_payload):
-        print("key exchange send")
+    def key_exchange_send(self, key_exchange_payload,Tx_queue):
+        #print("key exchange send")
         # generate network layer format to link layer
-        to_link_layer = (self.to_label+","+self.from_label
+        to_network_layer = (self.to_label+","+self.from_label
             +","+"key_request"+","+self.seqnum+","+key_exchange_payload.hex())
-       
-        link = Link(to_link_layer)
-        to_mac, to_physical_layer = link.link()
-
-        # physical: client
-        client = Tcp_client(to_mac, to_physical_layer)
-        client.start_client()
+        Tx_queue.put(to_network_layer)

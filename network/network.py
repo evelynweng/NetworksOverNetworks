@@ -25,6 +25,8 @@ class Network():
             self.unchange_message = to_network_layer #packet unchange
 
     def network(self, to_network_layer):
+        # format already as format
+        # do nothing
         to_link_layer = to_network_layer
         return to_link_layer
     
@@ -146,7 +148,9 @@ class Network():
         new_to_label = self.get_from_label()
         message = self.get_payload()
         message = self.message_decrypt(message,shared_keys)
+        print("*****************************************************************")
         print ("decrypt message:" + message +" from: "+ new_to_label)
+        print("*****************************************************************")
 
         #set ACK message attribute
         self.to_label = new_to_label
