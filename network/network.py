@@ -99,7 +99,7 @@ class Network():
             hop = network_message.get_sequence_number()
             hop_max = 15 - network_message.get_ttl() - hop
             print(' '.join(['hop #', 'rtt', 'name']))
-            message = ' '.join([hop, str(rtt_datetime.total_seconds()), network_message.get_from_label(), hop_max])
+            message = ' '.join([str(hop), str(rtt_datetime.total_seconds()), network_message.get_from_label(), str(hop_max)])
             print(message)
 
             if is_equal(network_message.get_from_label(), network_message.get_to_label_original()):
