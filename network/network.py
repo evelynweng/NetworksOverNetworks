@@ -99,7 +99,7 @@ class Network():
             rtt_datetime = end_time - parse(start_time)
             hop = network_message.get_sequence_number()
             print(' '.join(['hop #      ', 'rtt       ', 'name    ']))
-            message = ' '.join([str(hop), str(rtt_datetime.total_seconds()), network_message.get_from_label()])
+            message = '       '.join([str(hop), str(rtt_datetime.total_seconds()), network_message.get_from_label()])
             print(message)
             if is_equal(network_message.get_from_label(), network_message.get_to_label_original()):
                 print("End")
