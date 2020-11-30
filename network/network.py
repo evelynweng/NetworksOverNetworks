@@ -105,10 +105,12 @@ class Network():
                 response_network_message.set_to_label(network_message.set_to_label_original()).set_acknowledgment_number('SYNC')\
                     .set_sequence_number(network_message.get_sequence_number() + 1).set_start_time_now()\
                     .set_ttl(network_message.get_sequence_number() + 1)
+                print("Responding with: plus 1: " + response_network_message.get_data())
                 return response_network_message
 
             return None
         else:
+            print("Responding with: " + response_network_message.set_ttl(15).get_data())
             return response_network_message.set_ttl(15).get_data()
 
     def function_ping(self,to_network_layer,mylabel):
