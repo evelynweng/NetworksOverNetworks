@@ -7,6 +7,11 @@ from data_parse.network_message import NetworkMessage
 
 rtt_arr = []
 
+
+def is_equal(str1, str2):
+    return str1 == str2
+
+
 class Network():
     def __init__(self, to_network_layer,shared_keys):
         if to_network_layer :
@@ -70,6 +75,7 @@ class Network():
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
     
         ttl = network_message.get_ttl()
+        print(network_message.get_data())
         if ttl > 0:
             network_message = network_message.set_ttl(ttl - 1)
             return network_message.get_data()
@@ -82,6 +88,7 @@ class Network():
         response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
 
+        print(network_message.get_data())
         if network_message.get_acknowledgment_number() == "ACK":
             start_time = network_message.get_start_time()
             end_time = datetime.datetime.now()
@@ -89,9 +96,17 @@ class Network():
             hop = network_message.get_sequence_number()
             hop_max = 15 - network_message.get_ttl() - hop
             print(' '.join(['hop #', 'rtt', 'name']))
-            if hop_max >= 0:
-                message = ' '.join([hop, str(rtt_datetime.total_seconds()), network_message.get_from_label(), hop_max])
-                print(message)
+            message = ' '.join([hop, str(rtt_datetime.total_seconds()), network_message.get_from_label(), hop_max])
+            print(message)
+
+            if is_equal(network_message.get_from_label(), network_message.get_to_label_original()):
+                    print("End")
+            else:
+                response_network_message.set_to_label(network_message.set_to_label_original()).set_acknowledgment_number('SYNC')\
+                    .set_sequence_number(network_message.get_sequence_number() + 1).set_start_time_now()\
+                    .set_ttl(network_message.get_sequence_number() + 1)
+                return response_network_message
+
             return None
         else:
             return response_network_message.set_ttl(15).get_data()
