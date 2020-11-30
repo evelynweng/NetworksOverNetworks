@@ -53,6 +53,8 @@ class NetworkMessage:
         data_length = 5
         if self.get_identifier() == 'ping':
             data_length = 6
+        elif self.get_identifier() == 'traceroute':
+            data_length = 7
         for x in range(data_length - len(self.to_network_layer)):
             self.to_network_layer.append('')
     # ----------------- end of common logic  ----------------------------
@@ -84,13 +86,11 @@ class NetworkMessage:
     def Average(self, lst):
         return sum(lst) / len(lst)
 
-    # traceroute [..., ttl]
+    # traceroute [..., sequence, start_time, ttl]
     def get_ttl(self):
-        return int(self.to_network_layer[4])
+        return int(self.to_network_layer[6])
 
     def set_ttl(self, val):
-        self.to_network_layer[4] = str(val)
+        self.to_network_layer[6] = str(val)
         return self
 
-    def is_traceroute_ACK(self):
-        return bool(self.to_network_layer[5])

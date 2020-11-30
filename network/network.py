@@ -48,26 +48,25 @@ class Network():
                 return to_link_layer
             
             elif self.get_identifier() == "traceroute":
-                to_link_layer = self.function_traceroute(self.unchange_message,mylabel)
+                to_link_layer = self.handle_traceroute(self.unchange_message, mylabel)
                 return to_link_layer
-                
+
             else:
                 return None # default action
 
         elif self.get_identifier() == 'traceroute':
-            to_link_layer = self.function_traceroute_mid(self.unchange_message,mylabel)
+            to_link_layer = self.handle_traceroute_mid(self.unchange_message, mylabel)
             return to_link_layer
 
         else: #not match keep sending message
             return self.get_forward_message()
 
 
-    # support functions (method that can be change): 
-    def function_traceroute_mid(self,to_network_layer,mylabel):
-        network_message = NetworkMessage(to_network_layer)
+    # support functions (method that can be change):
+    def handle_traceroute_mid(self, to_network_layer, mylabel):
+        network_message = NetworkMessage().from_string(to_network_layer)
         new_to_label = network_message.get_from_label()
-        identifier = network_message.get_identifier()
-        response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
+        response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
     
         ttl = network_message.get_ttl()
@@ -75,21 +74,19 @@ class Network():
             network_message = network_message.set_ttl(ttl - 1)
             return network_message.get_data()
         else:
-            return response_network_message.set_ttl(64).get_data()
+            return response_network_message.set_ttl(15).get_data()
 
-    def function_traceroute(self, to_network_layer,mylabel):
-        network_message = NetworkMessage(to_network_layer)
+    def handle_traceroute(self, to_network_layer, mylabel):
+        network_message = NetworkMessage().from_string(to_network_layer)
         new_to_label = network_message.get_from_label()
-        identifier = network_message.get_identifier()
-        response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
+        response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-            
+
         if network_message.get_acknowledgment_number() == "ACK":
             print('route: ' + network_message.get_data())
             return None
         else:
-            return response_network_message.set_ttl(64).get_data()
-        
+            return response_network_message.set_ttl(15).get_data()
     def function_ping(self,to_network_layer,mylabel):
         network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
