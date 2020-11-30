@@ -91,9 +91,9 @@ class Network():
         new_to_label = network_message.get_from_label()
         response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-        print("handle_traceroute" + network_message.get_data())
+        print("handle_traceroute: " + network_message.get_data())
         if network_message.get_acknowledgment_number() == "ACK":
-            start_time = network_message.get_start_time()
+            start_time = network_message.get_start_time_value()
             end_time = datetime.datetime.now()
             rtt_datetime = end_time - parse(start_time)
             hop = network_message.get_sequence_number()

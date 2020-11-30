@@ -107,6 +107,9 @@ class NetworkMessage:
     def get_sequence_number(self):
         return int(self.to_network_layer[4])
 
+    def get_start_time_value(self):
+        return self.to_network_layer[5]
+
     def set_to_label_original(self, val):
         self.to_network_layer[7] = str(val)
         return self
