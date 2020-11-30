@@ -76,13 +76,14 @@ class Network():
         new_to_label = network_message.get_from_label()
         response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-    
-        ttl = network_message.get_ttl()
-        print("handle_traceroute_mid" + network_message.get_data())
+
+        ttl = network_message.get_ttl() - 1
         if ttl > 0:
-            network_message = network_message.set_ttl(ttl - 1)
+            print("handle_traceroute_mid" + network_message.get_data())
+            network_message = network_message.set_ttl(ttl)
             return network_message.get_data()
         else:
+            print("handle_traceroute_mid: else:" + network_message.get_data())
             return response_network_message.set_ttl(15).get_data()
 
     def handle_traceroute(self, to_network_layer, mylabel):
