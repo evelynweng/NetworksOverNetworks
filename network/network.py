@@ -64,6 +64,7 @@ class Network():
             return to_link_layer
 
         else: #not match keep sending message
+            print("forward message")
             return self.get_forward_message()
 
 
@@ -75,7 +76,7 @@ class Network():
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
     
         ttl = network_message.get_ttl()
-        print(network_message.get_data())
+        print("handle_traceroute_mid" + network_message.get_data())
         if ttl > 0:
             network_message = network_message.set_ttl(ttl - 1)
             return network_message.get_data()
@@ -87,8 +88,7 @@ class Network():
         new_to_label = network_message.get_from_label()
         response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-
-        print(network_message.get_data())
+        print("handle_traceroute" + network_message.get_data())
         if network_message.get_acknowledgment_number() == "ACK":
             start_time = network_message.get_start_time()
             end_time = datetime.datetime.now()
