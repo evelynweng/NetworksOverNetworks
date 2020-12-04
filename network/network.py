@@ -13,7 +13,7 @@ def is_equal(str1, str2):
 
 
 class Network():
-    def __init__(self, to_network_layer,shared_keys):
+    def __init__(self, to_network_layer):
         if to_network_layer :
             network_data = to_network_layer.split(",")
             # to_label,mylabel,idtfier,seqnum,payload
@@ -30,7 +30,7 @@ class Network():
         to_link_layer = to_network_layer
         return to_link_layer
     
-    def recv_packet (self, mylabel,shared_keys):
+    def recv_packet (self, mylabel,shared_keys,recv_shared_keys):
 
         if self.match_label(mylabel):
             # print ("this server received:" + message +" from: "+ new_to_label)
@@ -39,7 +39,7 @@ class Network():
                 return to_link_layer
         
             elif self.get_identifier()=="ack_key_request" :
-                to_link_layer = self.function_ack_key_request(shared_keys)
+                to_link_layer = self.function_ack_key_request(recv_shared_keys)
                 return to_link_layer
 
             elif self.get_identifier() == "message":
@@ -146,6 +146,10 @@ class Network():
     def function_message(self,mylabel,shared_keys):
         new_to_label = self.get_from_label()
         message = self.get_payload()
+        print("*****************************************************************")
+        print ("recv message:" + message +" from: "+ new_to_label)
+        print("*****************************************************************")
+
         message = self.message_decrypt(message,shared_keys)
         print("*****************************************************************")
         print ("decrypt message:" + message +" from: "+ new_to_label)
@@ -173,12 +177,12 @@ class Network():
         to_link_layer = self.format_to_link_layer()
         return to_link_layer
 
-    def function_ack_key_request(self,shared_keys):
+    def function_ack_key_request(self,recv_shared_keys):
         new_to_label = self.get_from_label()
         message = self.get_payload()
 
         public_key = bytes.fromhex(message)
-        shared_keys[new_to_label] = public_key
+        recv_shared_keys[new_to_label] = public_key
         return None
 
     def get_pubic_key(self,shared_keys):

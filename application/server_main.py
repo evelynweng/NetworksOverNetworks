@@ -3,7 +3,7 @@ from link.link import Link
 from physical.tcp_server import Tcp_server
 from application import client_main 
 
-def service(mylabel,shared_keys,Tx_queue):
+def service(mylabel,shared_keys,Tx_queue,recv_shared_keys):
 	#physical layer
 	print("thread server")
 	tcp_server = Tcp_server()
@@ -25,8 +25,8 @@ def service(mylabel,shared_keys,Tx_queue):
 		
 		# network layer
 		
-		network = Network(to_network_layer,shared_keys)
-		to_link_layer = network.recv_packet(mylabel,shared_keys)
+		network = Network(to_network_layer)
+		to_link_layer = network.recv_packet(mylabel,shared_keys,recv_shared_keys)
 		
 		
 		if to_link_layer == None:

@@ -5,7 +5,7 @@ TOPOLOGY = 'sequential_topology'
 class Find_to_mac():
     def __init__(self):
         with open("link/connection_config.yaml") as fl:
-            self.config = yaml.load(fl)[TOPOLOGY]
+            self.config = yaml.full_load(fl)[TOPOLOGY]
     
     def get_my_mac(self):
         return "0.0.0.0"

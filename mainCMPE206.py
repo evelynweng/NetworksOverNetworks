@@ -10,13 +10,17 @@ parser.add_argument('--command', nargs='?', choices=['traceroute', 'ping', 'mess
 # main process
 mylabel = input("my label name:")
 shared_keys = dict()
+recv_shared_keys = dict()
 Tx_queue = queue.Queue()
 
 
+
 # call subprocess
-t_server = threading.Thread(target=server_main.service, args=(mylabel, shared_keys,Tx_queue))
-t_send = threading.Thread(target=send_main.service, args=(mylabel, shared_keys,Tx_queue))
-t_app_client = threading.Thread(target=client_main.service, args=(mylabel,shared_keys,Tx_queue))
+t_server = threading.Thread(target=server_main.service, 
+                            args=(mylabel, shared_keys,Tx_queue,recv_shared_keys))
+t_send = threading.Thread(target=send_main.service, args=(mylabel,Tx_queue))
+t_app_client = threading.Thread(target=client_main.service, 
+                            args=(mylabel,shared_keys,Tx_queue,recv_shared_keys))
 
 # exec subprocess
 t_server.start()

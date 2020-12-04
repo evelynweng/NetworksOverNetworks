@@ -2,7 +2,7 @@
 from link.link import Link
 from physical.tcp_client import Tcp_client
 
-def service(mylabel, shared_keys,Tx_queue):
+def service(mylabel,Tx_queue):
     # send_number = 0
     while True:
         # get data from other thread

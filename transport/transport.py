@@ -17,24 +17,28 @@ class Transport():
         self.payload  = ','.join(network_data[4 : ])
         self.forward_message = to_transport_layer
 
-    def transport(self, shared_keys,Tx_queue):
+    def transport(self, shared_keys,Tx_queue,recv_shared_keys):
         if (self.identifier == "message"):
-            to_network_layer = self.secure_messaging(shared_keys,Tx_queue)
+            to_network_layer = self.secure_messaging(shared_keys,Tx_queue,recv_shared_keys)
         else:
             to_network_layer = self.forward_message
         return to_network_layer
 
-    def secure_messaging(self,shared_keys,Tx_queue):
+    def secure_messaging(self,shared_keys,Tx_queue,recv_shared_keys):
         #print("secure messaging handshake")
         ke1 = KeyExchange()
         key_exchange_payload = ke1.key_exchange_payload(self.to_label,shared_keys,True)
         self.key_exchange_send(key_exchange_payload,Tx_queue)
+        
+        recv_shared_keys[str(self.to_label)] = None #create buffer wait for public key
 
-        while not (shared_keys[str(self.to_label)]): 
+        while not (recv_shared_keys[str(self.to_label)]): 
             continue
         #print("get the pubkey from target")
 
-        public_key_from_target = shared_keys[str(self.to_label)]
+        public_key_from_target = recv_shared_keys[str(self.to_label)]
+        recv_shared_keys.pop(self.to_label)
+
         temp=ke1.ack_key_exchange_payload(self.to_label,shared_keys, public_key_from_target)
         shared_key = shared_keys[self.to_label] 
         cipher = SymmetricEncryption(shared_key)

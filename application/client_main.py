@@ -7,7 +7,7 @@ from application.service_send_message import Service_send_message
 from application.ping_service import Ping_service
 from application.traceroute_service import Traceroute_service
 
-def service(mylabel,shared_keys,Tx_queue):
+def service(mylabel,shared_keys,Tx_queue,recv_shared_keys):
 	#application layer
 	while 1:
 		
@@ -20,7 +20,7 @@ def service(mylabel,shared_keys,Tx_queue):
 			service_send_message = Service_send_message()
 			to_transport_layer = service_send_message.message_service(mylabel)
 			transport = Transport(to_transport_layer)
-			to_network_layer = transport.transport(shared_keys,Tx_queue) 
+			to_network_layer = transport.transport(shared_keys,Tx_queue,recv_shared_keys) 
 
 		elif command[0] == 'ping':
 			ping_send_service = Ping_service()
@@ -34,13 +34,13 @@ def service(mylabel,shared_keys,Tx_queue):
 
 		if isinstance(to_network_layer,str):
 			# network layer
-			network = Network(to_network_layer, shared_keys)
+			network = Network(to_network_layer)
 			to_link_layer = network.network(to_network_layer)
 			Tx_queue.put(to_link_layer)
 			
 		elif isinstance(to_network_layer,list):
 			for packet in to_network_layer:
-				network = Network(packet, shared_keys)
+				network = Network(packet)
 				to_link_layer = network.network(packet)
 				Tx_queue.put(to_link_layer)
 
