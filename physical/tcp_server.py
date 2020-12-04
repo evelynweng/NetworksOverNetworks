@@ -11,16 +11,16 @@ class Tcp_server():
         #self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.s.bind((self.TCP_IP, self.TCP_PORT))
         self.s.listen(1)
-        print ("start listen")
+        #print ("start listen")
 
     def recv(self):
         print("server waits for connection ..")
         self.conn, self.addr = self.s.accept()
-        print ('Connection address:', self.addr)
+        #print ('Connection address:', self.addr)
         data = self.conn.recv(self.BUFFER_SIZE)
         if data:
             data = data.decode()
-            print ("received data",data)
+            #print ("received data",data)
             self.conn.send("router ack".encode())  # echo
         self.conn.close()
         return data

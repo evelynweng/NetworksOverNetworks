@@ -31,7 +31,7 @@ class Tcp_client():
 
         data = s.recv(BUFFER_SIZE)
 
-        print(__name__, "Recved")
+        #print(__name__, "Recved")
 
         s.close()
 

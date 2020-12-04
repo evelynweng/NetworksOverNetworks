@@ -45,7 +45,7 @@ class Transport():
         #print("secure_messaging shared_key:", shared_key)
         #print("self.payload.encode():", self.payload.encode())
         ciphertext = cipher.encrypt(self.payload.encode())
-        print("encrypt message:", ciphertext)
+        # print("encrypt message:", ciphertext)
         shared_keys.pop(self.to_label) #delete key
         #print("delete used key:",self.to_label)
         return (self.to_label+","+self.from_label+","

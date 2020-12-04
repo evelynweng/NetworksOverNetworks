@@ -66,7 +66,7 @@ class Network():
             return to_link_layer
 
         else: #not match keep sending message
-            print("forward message")
+            print("forward message to:",self.to_label)
             return self.get_forward_message()
 
 
@@ -92,7 +92,7 @@ class Network():
         new_to_label = network_message.get_from_label()
         response_network_message = NetworkMessage().from_string(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
-        print("handle_traceroute: " + network_message.get_data())
+        # print("handle_traceroute: " + network_message.get_data())
         if network_message.get_acknowledgment_number() == "ACK":
             start_time = network_message.get_start_time_value()
             end_time = datetime.datetime.now()
@@ -141,19 +141,16 @@ class Network():
         else:
             sequence = network_message.get_sequence()
             start_time = network_message.get_start_time()
+            print("ping echo:", new_to_label)
             return response_network_message.set_sequence(sequence).set_start_time(start_time).get_data()
 
     def function_message(self,mylabel,shared_keys):
         new_to_label = self.get_from_label()
         message = self.get_payload()
-        print("*****************************************************************")
         print ("recv message:" + message +" from: "+ new_to_label)
-        print("*****************************************************************")
 
         message = self.message_decrypt(message,shared_keys)
-        print("*****************************************************************")
         print ("decrypt message:" + message +" from: "+ new_to_label)
-        print("*****************************************************************")
 
         #set ACK message attribute
         self.to_label = new_to_label
