@@ -117,12 +117,10 @@ class Network():
     def function_ping(self,to_network_layer,mylabel):
         network_message = NetworkMessage(to_network_layer)
         new_to_label = network_message.get_from_label()
-        identifier = network_message.get_identifier()
         response_network_message = NetworkMessage(to_network_layer).set_to_label(new_to_label) \
             .set_from_label(mylabel).set_acknowledgment_number('ACK')
 
         if network_message.get_acknowledgment_number() == "ACK":
-            sequence = network_message.get_sequence()
             start_time = network_message.get_start_time()
             end_time = datetime.datetime.now()
 

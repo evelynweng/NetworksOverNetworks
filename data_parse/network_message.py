@@ -75,7 +75,7 @@ class NetworkMessage:
         return self.to_network_layer[4]
 
     def get_start_time(self):
-        return ','.join(self.to_network_layer[5:])
+        return self.to_network_layer[5]
 
     def set_sequence(self, val):
         self.to_network_layer[4] = 'seq = ' + str(val)
