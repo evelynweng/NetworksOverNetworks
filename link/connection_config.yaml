@@ -1,13 +1,13 @@
 sequential_topology:
   left_right_neighbors:
-    left: 
-    right: 
+    left: None
+    right: 13.52.254.62
   
   global_routing_table:
-    "001": left
-    "002": left
-    "003": left
-    "004": self
+    "001": self
+    "002": right
+    "003": right
+    "004": right
     "005": right
     "006": right
     "007": right
